@@ -1,0 +1,6 @@
+php artisan make:model EventType -cmr
+php artisan make:model Event -cmr
+php artisan make:model Contributors -cmr
+php artisan make:model EventType -cmr
+php artisan make:model Ticket -cmr
+php artisan make:model Payment -cmr
