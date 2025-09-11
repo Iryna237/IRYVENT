@@ -10,6 +10,10 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
+Route::get('/createevent', function () {
+    return view('createevent');
+})->name('createevent');
+
 Route::get('/admin-dashboard', function () {
     return view('dashboard');
 })->name('admin-dashboard');
