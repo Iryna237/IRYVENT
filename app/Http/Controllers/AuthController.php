@@ -1,14 +1,22 @@
 <?php
 
+
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Creator;
-
-use Illuminate\support\facades\Hash;
-
-use Illuminate\support\facades\Auth;
-
+use Illuminate\support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DemandeSoumisseMail;
+use App\Mail\CompteValide;
+use App\Mail\CompteRefuse;
+
+
+
+ 
+
+
 
 class AuthController extends Controller
 {
@@ -29,7 +37,7 @@ class AuthController extends Controller
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'role'       => 'customer',
         ]);
 
@@ -46,7 +54,7 @@ class AuthController extends Controller
             'versa_ID_card'    => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_selfie'   => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_card'     => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-             'role' => 'string',
+            'role' => 'string',
         ]);
 
         $vice_card_Path   = $request->file('vice_ID_card')->store('ID_card', 'public');
@@ -54,16 +62,18 @@ class AuthController extends Controller
         $face_selfie_Path = $request->file('face_selfie')->store('face_selfie', 'public');
         $face_card_Path   = $request->file('face_card')->store('face_card', 'public');
 
-        User::create([
+        $user = User::create([
             'name'         => $request->name, 
             'email'        => $request->email,
-            'password'     => Hash::make($request->password),
+            'password'     => $request->password,
             'vice_ID_card'    => $vice_card_Path,
             'versa_ID_card'   => $versa_card_Path,
             'face_selfie'  => $face_selfie_Path,
             'face_card'    => $face_card_Path,
             'role'       => 'creator',
         ]);
+
+        Mail::to($user->email)->send(new \App\Mail\DemandeSoumisseMail($user));
 
         return redirect()->route('home')->with('success', 'Creator registration successful!');
     }
