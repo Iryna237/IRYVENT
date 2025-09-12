@@ -14,9 +14,41 @@ Route::get('/createevent', function () {
     return view('createevent');
 })->name('createevent');
 
-Route::get('/admin-dashboard', function () {
-    return view('dashboard');
-})->name('admin-dashboard');
+
+//  route du Dashboard admin
+Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Tableau de bord
+    Route::get('/admin-dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin-dashboard');
+
+    // Organisations
+    Route::get('/organizations', function () {
+        return view('admin.organization');
+    })->name('organization');
+
+    // Événements
+    Route::get('/events', function () {
+        return view('admin.events');
+    })->name('events');
+
+    // Utilisateurs
+    Route::get('/users', function () {
+        return view('admin.users');
+    })->name('users');
+
+    // Transactions
+    Route::get('/transactions', function () {
+        return view('admin.transaction');
+    })->name('transactions');
+
+    // Paramètres
+    Route::get('/settings', function () {
+        return view('admin.settings');
+    })->name('settings');
+});
+
+
 
 Route::get('/creator-dashboard', function () {
     return view('organizer_dashboard');
