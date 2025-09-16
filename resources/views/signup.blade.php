@@ -41,7 +41,7 @@
         .event-image {
             flex: 1;
             background: #f8f9fa
-                        url('/images/images_1.jpg') center/cover no-repeat;
+                        url('hero2.jpeg') ;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;

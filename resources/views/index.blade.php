@@ -72,7 +72,7 @@
       color: white;
     }
 
-    /* CTA Button */
+    
     .btn-cta {
       background-color: var(--primary);
       color: white;
@@ -87,14 +87,14 @@
       box-shadow: 0 5px 15px rgba(125, 95, 255, 0.3);
     }
 
-    /* Feature Icons */
+    
     .feature-icon {
       font-size: 2.5rem;
       color: var(--primary);
       margin-bottom: 1rem;
     }
 
-    /* Footer */
+   
     .footer {
       background-color: var(--dark);
       color: white;
@@ -105,7 +105,7 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
+  
   <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">
@@ -129,8 +129,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- Hero -->
   <section class="hero d-flex align-items-center text-white">
     <div class="container">
       <div class="row">
@@ -152,8 +150,6 @@
             </div>
     </div>
   </section>
-
-  <!-- Events -->
   <section id="events" class="py-5 bg-light">
     <div class="container">
       <div class="text-center mb-5">
@@ -213,15 +209,12 @@
       </div>
     </div>
   </section>
-
-  <!-- Features -->
   <section id="features" class="py-5">
     <div class="container">
       <div class="text-center mb-5">
         <h2 class="fw-bold">Why Choose IRYVENT?</h2>
         <p class="text-muted">A complete solution for organizers and attendees</p>
       </div>
-      
       <div class="row g-4">
         <div class="col-md-4 text-center">
           <div class="feature-icon"><i class="bi bi-qr-code"></i></div>
@@ -248,8 +241,6 @@
       </div>
     </div>
   </section>
-
-  <!-- CTA -->
   <section class="py-5 bg-primary text-white text-center">
     <div class="container">
       <h2 class="fw-bold mb-4">Ready to revolutionize your events?</h2>
@@ -260,8 +251,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
   <footer class="footer py-5">
     <div class="container">
       <div class="row">
@@ -300,8 +289,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- Bootstrap JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

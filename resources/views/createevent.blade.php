@@ -304,7 +304,7 @@
             color: var(--premium);
         }
         
-        /* Stepper styles */
+       
         .stepper {
             display: flex;
             justify-content: space-between;
@@ -370,7 +370,7 @@
             color: var(--success);
         }
         
-        /* Form steps */
+        
         .form-step {
             display: none;
         }
@@ -385,14 +385,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Navigation buttons */
+        
         .form-navigation {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
         
-        /* Event type cards */
+        
         .event-type-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -466,7 +466,7 @@
             <p>Fill in the details to create an amazing event</p>
         </div>
 
-        <!-- Stepper -->
+        
         <div class="stepper">
             <div class="step active" id="step1">
                 <div class="step-icon">1</div>
@@ -492,9 +492,6 @@
         -->
 
         <form action="#" method="POST" enctype="multipart/form-data" id="eventForm">
-            <!-- CSRF token placeholder -->
-            
-            <!-- Step 1: Event Type Selection -->
             <div class="form-step active" id="step1-form">
                 <div class="form-section">
                     <div class="form-section-title">
@@ -540,12 +537,10 @@
                 </div>
                 
                 <div class="form-navigation">
-                    <div></div> <!-- Empty div for spacing -->
+                    <div></div> 
                     <button type="button" class="btn btn-primary next-step" data-step="2">Next <i class="fas fa-arrow-right ms-2"></i></button>
                 </div>
             </div>
-            
-            <!-- Step 2: Event Details -->
             <div class="form-step" id="step2-form">
                 <div class="form-section">
                     <div class="form-section-title">
@@ -588,9 +583,9 @@
                         <input type="text" id="location" name="location" class="form-control" placeholder="Enter event location" required>
                     </div>
                     
-                    <!-- Dynamic fields based on event type -->
+                    
                     <div id="event-type-specific-fields">
-                        <!-- Fields will be inserted here based on event type selection -->
+                        
                     </div>
                 </div>
                 
@@ -600,7 +595,7 @@
                 </div>
             </div>
             
-            <!-- Step 3: Tickets and Banner -->
+            
             <div class="form-step" id="step3-form">
                 <div class="form-section">
                     <div class="form-section-title">
@@ -608,7 +603,7 @@
                     </div>
                     
                     <div id="ticket-container">
-                        <!-- Standard Ticket -->
+                        
                         <div class="ticket-type standard">
                             <div class="ticket-header">
                                 <div>
@@ -635,7 +630,7 @@
                             </div>
                         </div>
                         
-                        <!-- VIP Ticket -->
+                       
                         <div class="ticket-type vip">
                             <div class="ticket-header">
                                 <div>
@@ -662,7 +657,7 @@
                             </div>
                         </div>
                         
-                        <!-- Premium Ticket -->
+                       
                         <div class="ticket-type premium">
                             <div class="ticket-header">
                                 <div>
@@ -812,13 +807,13 @@
             // Update current step
             currentStep = stepNumber;
             
-            // If moving to step 2 and event type is selected, load specific fields
+           
             if (stepNumber === 2 && eventTypeInput.value) {
                 loadEventTypeSpecificFields(eventTypeInput.value);
             }
         }
         
-        // Load event type specific fields
+        
         function loadEventTypeSpecificFields(eventType) {
             const container = document.getElementById('event-type-specific-fields');
             container.innerHTML = '';
@@ -890,8 +885,6 @@
             
             container.innerHTML = specificFields;
         }
-        
-        // Character count for description
         const description = document.getElementById('description');
         const charCount = document.getElementById('charCount');
         
@@ -905,8 +898,6 @@
                 charCount.style.color = '#6c757d';
             }
         });
-        
-        // Image preview function
         function previewImage(event) {
             const input = event.target;
             const preview = document.getElementById('preview');

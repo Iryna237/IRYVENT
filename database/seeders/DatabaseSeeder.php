@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
          User::factory()->create([
             'name' => 'Iryvent Support',
             'email' => 'contact@iryvent.com',
-            'password' => Hash::make('IryventSupporrt'),
+            'password' => Hash::make('IryventSupporrt'), 
             'role' => 'admin',
         ]);
     }

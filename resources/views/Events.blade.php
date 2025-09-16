@@ -267,7 +267,7 @@
                 </div>
             </nav>
 
-            <!-- Main Content -->
+            
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -286,7 +286,7 @@
 
             <div class="main-content">
                 <div class="container-fluid">
-                    <!-- Stats Row -->
+                    
                     <div class="row mb-4">
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card card-shadow border-left-primary h-100 py-2">
@@ -357,7 +357,7 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
+                    
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="d-flex justify-content-between">
@@ -397,9 +397,9 @@
                         </div>
                     </div>
 
-                    <!-- Events Grid -->
+                    
                     <div class="row">
-                        <!-- Event Card 1 -->
+                        
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card event-card card-shadow h-100">
                                 <span class="event-status">
@@ -456,7 +456,7 @@
                             </div>
                         </div>
 
-                        <!-- Event Card 2 -->
+                        
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card event-card card-shadow h-100">
                                 <span class="event-status">
@@ -513,7 +513,7 @@
                             </div>
                         </div>
 
-                        <!-- Event Card 3 -->
+                        
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card event-card card-shadow h-100">
                                 <span class="event-status">
@@ -570,7 +570,7 @@
                             </div>
                         </div>
 
-                        <!-- Event Card 4 -->
+                        
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card event-card card-shadow h-100">
                                 <span class="event-status">
@@ -627,7 +627,7 @@
                             </div>
                         </div>
 
-                        <!-- Event Card 5 -->
+                        
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card event-card card-shadow h-100">
                                 <span class="event-status">
@@ -684,7 +684,7 @@
                             </div>
                         </div>
 
-                        <!-- Event Card 6 -->
+                       
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card event-card card-shadow h-100">
                                 <span class="event-status">
@@ -742,7 +742,7 @@
                         </div>
                     </div>
 
-                    <!-- Pagination -->
+                    
                     <div class="row mt-4">
                         <div class="col-12">
                             <nav aria-label="Events pagination">
@@ -763,7 +763,7 @@
                 </div>
             </div>
 
-            <!-- Footer -->
+           
             <footer class="sticky-footer bg-white mt-auto">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -774,7 +774,7 @@
         </div>
     </div>
 
-    <!-- Add Event Modal -->
+    
     <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
