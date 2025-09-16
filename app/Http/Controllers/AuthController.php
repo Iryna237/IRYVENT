@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Creator;
+use App\Models\Demande;
+
 
 use Illuminate\Support\Facades\Hash;
 
@@ -54,7 +56,7 @@ class AuthController extends Controller
         $face_selfie_Path = $request->file('face_selfie')->store('face_selfie', 'public');
         $face_card_Path   = $request->file('face_card')->store('face_card', 'public');
 
-        User::create([
+        Demande::create([
             'name'         => $request->name, 
             'email'        => $request->email,
             'password'     => Hash::make($request->password),
@@ -62,7 +64,7 @@ class AuthController extends Controller
             'versa_ID_card'   => $versa_card_Path,
             'face_selfie'  => $face_selfie_Path,
             'face_card'    => $face_card_Path,
-            'role'       => 'creator',
+            'status'       => 'pending',
         ]);
 
         return redirect()->route('home')->with('success', 'Creator registration successful!');
@@ -71,6 +73,7 @@ class AuthController extends Controller
     {
         return view('login');
     }   
+
     public function Formlogin (Request $request){
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -78,15 +81,14 @@ class AuthController extends Controller
             session(['user_id' => $user->id, 'user_name' => $user->name, 'user_role' => $user->role]);
             
             if ($user->role === 'admin') {
-                return redirect()->route('admin-dashboard');
+                return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'creator') {
-                return redirect()->route('creator-dashboard');
+                return redirect()->route('creator.dashboard');
             } else {
                 return redirect()->route('home');
             }
+        }
+        // Ajoutez une redirection en cas d'échec d'authentification
+        return redirect()->back()->withErrors(['email' => 'Identifiants invalides.']);
     }
-    {
-    
-    }   
-}
 }

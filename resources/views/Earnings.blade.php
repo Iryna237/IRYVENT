@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRYVENT - Earnings Dashboard</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Custom CSS -->
-    <style>
+@extends(layouts.layout)
+
+@section('content')
+        <style>
         :root {
             --primary-color: #6f42c1; /* IRYVENT purple */
             --secondary-color: #20c997;
@@ -57,8 +49,7 @@
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
     </style>
-</head>
-<body>
+
     <div class="container-fluid py-4">
         <h2 class="mb-4">Earnings Dashboard</h2>
         
@@ -213,8 +204,6 @@
             }
         });
     </script>
+@endsection
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+

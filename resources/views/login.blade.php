@@ -374,7 +374,7 @@
             @endif
             
            
-            <form action="{{ route('iryna-login') }}" method="POST">
+            <form action="{{ route('auth.iryna-login') }}" method="POST">
                 @csrf
                 <div class="form-floating">
                     <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required autofocus>
