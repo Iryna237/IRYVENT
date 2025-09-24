@@ -71,6 +71,7 @@ class AuthController extends Controller
     {
         return view('login');
     }   
+
     public function Formlogin (Request $request){
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -83,10 +84,9 @@ class AuthController extends Controller
                 return redirect()->route('creator-dashboard');
             } else {
                 return redirect()->route('home');
-            }
+        }
+        } else {
+            return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+        }  
     }
-    {
-    
-    }   
-}
 }

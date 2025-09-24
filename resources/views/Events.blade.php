@@ -415,7 +415,7 @@
                                         <div>
                                             <h5 class="card-title mb-0">fashion street Festival</h5>
                                             <p class="event-category mb-0">fashion</p>
-                                            <small class="text-muted"><i class="bi bi-geo-alt me-1"></i> Bafoussan, party house</small>
+                                            <small class="text-muted"><i class="bi bi-geo-alt me-1"></i> Bafoussam, party house</small>
                                         </div>
                                     </div>
                                     <p class="card-text">Annual fashion festival featuring top artists and designers across multiple genres with creativity and activities.</p>

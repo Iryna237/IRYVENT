@@ -602,103 +602,68 @@
                         <i class="fas fa-ticket-alt"></i> Ticket Information
                     </div>
                     
-                    <div id="ticket-container">
-                        
-                        <div class="ticket-type standard">
-                            <div class="ticket-header">
-                                <div>
-                                    <div class="ticket-title"><i class="fas fa-ticket-alt"></i> Standard Ticket</div>
-                                    <span class="ticket-badge badge-standard">Most Popular</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Price (FCFA)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">FCFA</span>
-                                        <input type="number" name="tickets[standard][price]" class="form-control" placeholder="0.00" min="0" step="100" value="5000" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Available Quantity</label>
-                                    <input type="number" name="tickets[standard][quantity]" class="form-control" placeholder="Number of tickets" min="1" value="100" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Ticket Description</label>
-                                <textarea name="tickets[standard][description]" class="form-control" rows="2" placeholder="What's included in this ticket">Access to main event area, basic amenities</textarea>
-                            </div>
-                        </div>
-                        
-                       
-                        <div class="ticket-type vip">
-                            <div class="ticket-header">
-                                <div>
-                                    <div class="ticket-title"><i class="fas fa-crown"></i> VIP Ticket</div>
-                                    <span class="ticket-badge badge-vip">Premium Experience</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Price (FCFA)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">FCFA</span>
-                                        <input type="number" name="tickets[vip][price]" class="form-control" placeholder="0.00" min="0" step="100" value="15000" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Available Quantity</label>
-                                    <input type="number" name="tickets[vip][quantity]" class="form-control" placeholder="Number of tickets" min="1" value="50" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Ticket Description</label>
-                                <textarea name="tickets[vip][description]" class="form-control" rows="2" placeholder="What's included in this ticket">Premium seating, complimentary drinks, VIP lounge access</textarea>
-                            </div>
-                        </div>
-                        
-                       
-                        <div class="ticket-type premium">
-                            <div class="ticket-header">
-                                <div>
-                                    <div class="ticket-title"><i class="fas fa-gem"></i> Premium Ticket</div>
-                                    <span class="ticket-badge badge-premium">Exclusive</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Price (FCFA)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">FCFA</span>
-                                        <input type="number" name="tickets[premium][price]" class="form-control" placeholder="0.00" min="0" step="100" value="25000" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Available Quantity</label>
-                                    <input type="number" name="tickets[premium][quantity]" class="form-control" placeholder="Number of tickets" min="1" value="20" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Ticket Description</label>
-                                <textarea name="tickets[premium][description]" class="form-control" rows="2" placeholder="What's included in this ticket">Front row seats, backstage access, meet & greet with performers, exclusive merchandise</textarea>
-                            </div>
-                        </div>
-                    </div>
+                   <div id="ticket-container">
+    
+</div>
+
+<button type="button" class="btn btn-primary mt-3" onclick="addTicket()">
+    <i class="fas fa-plus"></i> Add Ticket
+</button>
+
+<script>
+let ticketIndex = 0;
+
+function addTicket() {
+    ticketIndex++;
+
+    const container = document.getElementById('ticket-container');
+
+    const ticketDiv = document.createElement('div');
+    ticketDiv.classList.add('ticket-type', 'card', 'p-3', 'mb-3', 'position-relative');
+    ticketDiv.setAttribute('id', 'ticket-' + ticketIndex);
+
+    ticketDiv.innerHTML = `
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" 
+            onclick="removeTicket(${ticketIndex})"></button>
+
+        <div class="mb-3">
+            <label class="form-label">Ticket Name</label>
+            <input type="text" name="tickets[${ticketIndex}][title]" 
+                class="form-control" placeholder="Ex: VIP, Standard, etc." required>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Price (FCFA)</label>
+                <div class="input-group">
+                    <span class="input-group-text">FCFA</span>
+                    <input type="number" name="tickets[${ticketIndex}][price]" 
+                        class="form-control" placeholder="0.00" min="0" step="100" required>
                 </div>
-                
-                <div class="form-section">
-                    <div class="form-section-title">
-                        <i class="fas fa-image"></i> Event Banner
-                    </div>
-                    <div class="mb-3">
-                        <label for="banner" class="form-label"><i class="fas fa-upload"></i> Event Banner (Image)</label>
-                        <input type="file" id="banner" name="banner" class="form-control" accept="image/*" required onchange="previewImage(event)">
-                        <div class="image-preview">
-                            <span id="previewText">Image preview will appear here</span>
-                            <img id="preview" src="" alt="Preview">
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Available Quantity</label>
+                <input type="number" name="tickets[${ticketIndex}][quantity]" 
+                    class="form-control" placeholder="Number of tickets" min="1" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ticket Description</label>
+            <textarea name="tickets[${ticketIndex}][description]" 
+                class="form-control" rows="2" placeholder="What's included in this ticket"></textarea>
+        </div>
+    `;
+
+    container.appendChild(ticketDiv);
+}
+
+function removeTicket(index) {
+    const ticketDiv = document.getElementById('ticket-' + index);
+    if (ticketDiv) ticketDiv.remove();
+}
+</script>
+
 
                 <div class="form-navigation">
                     <button type="button" class="btn btn-outline-primary prev-step" data-step="2"><i class="fas fa-arrow-left me-2"></i> Previous</button>
