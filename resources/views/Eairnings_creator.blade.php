@@ -3,6 +3,7 @@
 @section('content')
         <style>
         :root {
+            --primary-color: #6f42c1; /* IRYVENT purple */
             --secondary-color: #20c997;
         }
         

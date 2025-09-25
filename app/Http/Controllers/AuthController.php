@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Creator;
+use App\Models\Demande;
+
 
 use Illuminate\Support\Facades\Hash;
 
@@ -46,7 +48,7 @@ class AuthController extends Controller
             'versa_ID_card'    => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_selfie'   => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_card'     => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-             'role' => 'string',
+            'role' => 'string',
         ]);
 
         $vice_card_Path   = $request->file('vice_ID_card')->store('ID_card', 'public');
@@ -54,7 +56,7 @@ class AuthController extends Controller
         $face_selfie_Path = $request->file('face_selfie')->store('face_selfie', 'public');
         $face_card_Path   = $request->file('face_card')->store('face_card', 'public');
 
-        User::create([
+        Demande::create([
             'name'         => $request->name, 
             'email'        => $request->email,
             'password'     => Hash::make($request->password),
@@ -62,7 +64,7 @@ class AuthController extends Controller
             'versa_ID_card'   => $versa_card_Path,
             'face_selfie'  => $face_selfie_Path,
             'face_card'    => $face_card_Path,
-            'role'       => 'creator',
+            'status'       => 'pending',
         ]);
 
         return redirect()->route('home')->with('success', 'Creator registration successful!');
@@ -79,14 +81,13 @@ class AuthController extends Controller
             session(['user_id' => $user->id, 'user_name' => $user->name, 'user_role' => $user->role]);
             
             if ($user->role === 'admin') {
-                return redirect()->route('admin-dashboard');
+                return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'creator') {
-                return redirect()->route('creator-dashboard');
+                return redirect()->route('creator.dashboard');
             } else {
                 return redirect()->route('home');
+            }
         }
-        } else {
-            return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
-        }  
+        return redirect()->back()->withErrors(['email' => 'Identifiants invalides.']);
     }
 }

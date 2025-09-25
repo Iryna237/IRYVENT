@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizer Dashboard | IRYVENT</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+ @extends('layouts.layout')
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+ @section('content')
     <style>
         :root {
             --primary: #7d5fff;
@@ -57,7 +45,7 @@
         
         /* Main Content */
         .main-content {
-            margin-left: 250px;
+            margin-left: 130px;
             padding: 20px;
             transition: all 0.3s;
         }
@@ -101,29 +89,6 @@
             border-color: var(--primary);
         }
     </style>
-</head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar p-3" style="width: 250px;">
-        <div class="sidebar-brand d-flex align-items-center mb-4">
-            <i class="bi bi-ticket-perforated fs-4 me-2"></i>
-            <span>IRYVENT</span>
-        </div>
-        
-        <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-                <a class="nav-link sidebar-link active mb-2 rounded" href="#">
-                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                </a>
-            </li>
-            <li class="nav-item"><a class="nav-link sidebar-link mb-2 rounded" href="#"><i class="bi bi-calendar-event me-2"></i> My Events</a></li>
-            <li class="nav-item"><a class="nav-link sidebar-link mb-2 rounded" href="#"><i class="bi bi-ticket-detailed me-2"></i> Tickets</a></li>
-            <li class="nav-item"><a class="nav-link sidebar-link mb-2 rounded" href="#"><i class="bi bi-shop me-2"></i> Booths</a></li>
-            <li class="nav-item"><a class="nav-link sidebar-link mb-2 rounded" href="#"><i class="bi bi-graph-up me-2"></i> Analytics</a></li>
-            <li class="nav-item"><a class="nav-link sidebar-link mb-2 rounded" href="#"><i class="bi bi-wallet2 me-2"></i> Earnings</a></li>
-            <li class="nav-item"><a class="nav-link sidebar-link mb-2 rounded" href="#"><i class="bi bi-gear me-2"></i> Settings</a></li>
-        </ul>
-    </div>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -256,5 +221,5 @@
             options: { responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '70%' }
         });
     </script>
-</body>
-</html>
+
+ @endsection()

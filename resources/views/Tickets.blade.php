@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket Management | IRYVENT</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="assets/bootstrap-icons.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="assets/bootstrap.min.css">
+@extends('layouts.layout')
+@section('content')
     <style>
         :root {
             --primary: #7d5fff;
@@ -50,7 +42,7 @@
         
         /* Main Content */
         .main-content {
-            margin-left: 250px;
+            margin-left: 130px;
             padding: 20px;
         }
         
@@ -113,43 +105,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
     </style>
-</head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar p-3" style="width: 250px;">
-        <div class="sidebar-brand d-flex align-items-center mb-4">
-            <i class="bi bi-ticket-perforated fs-4 me-2"></i>
-            <span>IRYVENT</span>
-        </div>
-        
-        <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-                <a class="nav-link sidebar-link mb-2 rounded" href="organizer_dashboard.html">
-                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-link mb-2 rounded" href="My_Events.html">
-                    <i class="bi bi-calendar-event me-2"></i> My Events
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-link active mb-2 rounded" href="Tickets.html">
-                    <i class="bi bi-ticket-detailed me-2"></i> Tickets
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-link mb-2 rounded" href="Booths.Html">
-                    <i class="bi bi-shop me-2"></i> Booths
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-link mb-2 rounded" href="Analytics.html">
-                    <i class="bi bi-graph-up me-2"></i> Analytics
-                </a>
-            </li>
-        </ul>
-    </div>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -526,7 +481,4 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
