@@ -228,6 +228,18 @@
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit" class="btn btn-buy">Buy Ticket</button>
                         </form>
+                        <form action="{{ route('checkout') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="amount" value="6000">
+                            <input type="hidden" name="currency" value="XAF">
+                            <input type="hidden" name="email" value="iryna@gmail.com">
+                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
+                            
+                            <button type="submit" class="btn btn-buy">
+                                <i data-lucide="credit-card" class="w-5 h-5"></i>
+                                Buy ticket
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
