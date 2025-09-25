@@ -60,4 +60,13 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
 
 });
 
+Route::middleware(['role:creator'])->prefix('creator')->name('creator.')->group(function () {
+    Route::get('/dashboard', function(){return view('organizer_dashboard');})->name('dashboard');
+    Route::get('/tickets', function(){return view('Tickets');})->name('tickets');
+    Route::get('/event', function () {return view('creator_event');})->name('event');
+    Route::get('earning', function(){return view('Eairnings_creator');})->name('earning'); // liste des demandes
+    Route::get('/settigns', [AdminController::class, 'showDemande'])->name('settings'); // détail d'une demande
+    Route::post('booths', [AdminController::class, 'acceptDemande'])->name('booths');
+});
+
 require __DIR__.'/auth.php';

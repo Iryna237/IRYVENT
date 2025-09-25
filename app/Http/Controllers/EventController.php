@@ -22,7 +22,7 @@ class EventController extends Controller
 
         if ($request->hasFile('banner')) {
             $validated['banner'] = $request->file('banner')->store('banners', 'public');
-        }
+        }   
 
         $event = Event::create($validated);
 

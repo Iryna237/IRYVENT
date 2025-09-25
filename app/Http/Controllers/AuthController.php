@@ -48,7 +48,7 @@ class AuthController extends Controller
             'versa_ID_card'    => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_selfie'   => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_card'     => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-             'role' => 'string',
+            'role' => 'string',
         ]);
 
         $vice_card_Path   = $request->file('vice_ID_card')->store('ID_card', 'public');
@@ -88,7 +88,6 @@ class AuthController extends Controller
                 return redirect()->route('home');
             }
         }
-        // Ajoutez une redirection en cas d'échec d'authentification
         return redirect()->back()->withErrors(['email' => 'Identifiants invalides.']);
     }
 }
