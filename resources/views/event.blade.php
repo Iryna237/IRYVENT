@@ -204,216 +204,91 @@
         </div>
         <h3 class="section-title">Available Events</h3>
         <div class="row g-4">
-           
-            <div class="col-md-4 col-sm-6">
-                <div class="card event-card h-100">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="event-banner" alt="Concert Banner">
-                        <span class="badge category-badge position-absolute top-0 end-0 m-2 bg-primary">Festival</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Summer vibes</h5>
-                        <div class="event-details">
-                            <p><i class="fas fa-map-marker-alt"></i> Douala, Salle de Fête ARENA</p>
-                            <p><i class="fas fa-calendar-alt"></i> NOV 22 2025 </p>
-                            
+        <div class="row g-4">
+            @foreach($events as $event)
+                <div class="col-md-4 col-sm-6">
+                    <div class="card event-card shadow-lg border-0 h-100 rounded-3 overflow-hidden">
+                        
+                        {{-- Bannière --}}
+                        <div class="position-relative">
+                            <img src="{{ asset('storage/' . $event->banner) }}" 
+                                class="event-banner img-fluid w-100" 
+                                style="height:220px; object-fit:cover;" 
+                                alt="Event Banner">
+                            <span class="badge bg-gradient position-absolute top-0 end-0 m-2 px-3 py-2">
+                                {{ $event->event_type }}
+                            </span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="price-tag">3500XAF</div>
-                            <div class="text-muted small"><i class="fas fa-ticket-alt bg-danger"></i> 42 tickets left</div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pt-0">
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="3500">
-                            <input type="hidden" name="currency" value="XAF">
-                            <input type="hidden" name="email" value="iryna@gmail.com">
-                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
-                            
-                            <button type="submit" class="btn btn-buy">
-                                <i data-lucide="credit-card" class="w-5 h-5"></i>
-                                Buy ticket
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4 col-sm-6">
-                <div class="card event-card h-100">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="event-banner" alt="Basketball Game Banner">
-                        <span class="position-absolute top-0 end-0 bg-danger text-white px-2 py-1 m-2 rounded-pill small">Sports</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Basketball Championship Finals</h5>
-                        <div class="event-details">
-                            <p><i class="fas fa-map-marker-alt"></i> Gymnase Fandena Omnisport</p>
-                            <p><i class="fas fa-calendar-alt"></i>SEP 28, 2025 </p>
-                           
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="price-tag">5000XAF</div>
-                            <div class="text-muted small"><i class="fas fa-ticket-alt"></i> 18 tickets left</div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pt-0">
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="5000">
-                            <input type="hidden" name="currency" value="XAF">
-                            <input type="hidden" name="email" value="iryna@gmail.com">
-                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
-                            
-                            <button type="submit" class="btn btn-buy">
-                                <i data-lucide="credit-card" class="w-5 h-5"></i>
-                                Buy ticket
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
-            
-            <div class="col-md-4 col-sm-6">
-                <div class="card event-card h-100">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="event-banner" alt="Tech Conference Banner">
-                        <span class="position-absolute top-0 end-0 bg-info text-white px-2 py-1 m-2 rounded-pill small">Conference</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Tech Innovation Summit 2025</h5>
-                        <div class="event-details">
-                            <p><i class="fas fa-map-marker-alt"></i>Kribi Convention Center</p>
-                            <p><i class="fas fa-calendar-alt"></i> DEC 10, 2025 </p>
+                        {{-- Corps --}}
+                        <div class="card-body p-3">
+                            <h5 class="card-title fw-bold text-primary">{{ $event->title }}</h5>
+
+                            <div class="event-details text-muted mb-3">
+                                <p class="mb-1">
+                                    <i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ $event->location }}
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-calendar-alt me-2 text-success"></i>
+                                    {{ \Carbon\Carbon::parse($event->start_date)->format('M d, Y') }}
+                                </p>
+                            </div>
+
+                            {{-- Tickets --}}
+                            <div class="event-tickets border-top pt-2 mt-3">
+                                <h6 class="fw-semibold mb-2">🎟️ Ticket Types</h6>
+                                <ul class="list-unstyled small">
+                                    @forelse($event->tickets as $ticket)
+                                        <li class="d-flex justify-content-between border-bottom py-1">
+                                            <span>{{ $ticket->type }}</span>
+                                            <span class="fw-bold text-dark">
+                                                {{ number_format($ticket->price, 0, ',', ' ') }} XAF 
+                                                <span class="text-muted">({{ $ticket->quantity }} left)</span>
+                                            </span>
+                                        </li>
+                                    @empty
+                                        <li><em class="text-muted">No tickets available</em></li>
+                                    @endforelse
+                                </ul>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="price-tag">10 000XAF</div>
-                            <div class="text-muted small"><i class="fas fa-ticket-alt"></i> 65 tickets left</div>
+
+                        {{-- Pied de carte --}}
+                        <div class="card-footer bg-light border-0 text-center py-3">
+                            <div class="mb-2 small text-muted">
+                                <i class="fas fa-ticket-alt me-1 text-danger"></i> 
+                                {{ $event->tickets->sum('quantity') }} tickets left
+                            </div>
+
+                            <form action="{{ route('checkout') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="amount" value="{{ $event->tickets->first()->price ?? 0 }}">
+                                <input type="hidden" name="currency" value="XAF">
+                                <input type="hidden" name="email" value="iryna@gmail.com">
+                                <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
+                                
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">
+                                    <i class="fas fa-credit-card me-2"></i> Buy Ticket
+                                </button>
+                            </form>
                         </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pt-0">
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="10000">
-                            <input type="hidden" name="currency" value="XAF">
-                            <input type="hidden" name="email" value="iryna@gmail.com">
-                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
-                            
-                            <button type="submit" class="btn btn-buy">
-                                <i data-lucide="credit-card" class="w-5 h-5"></i>
-                                Buy ticket
-                            </button>
-                        </form>
                     </div>
                 </div>
-            </div>
-               <div class="col-md-6 col-lg-4">
-                  <div class="event-card card h-100">
-                      <div class="position-relative">
-                        <img src="images.jpg" class="card-img-top event-card-img" alt="Dream Fest">
-                        <div class="event-date"></div>
-                        <span class="badge category-badge position-absolute top-0 end-0 m-2 bg-secondary">Exhibition</span>
-                </div>
-                        <div class="card-body">
-                        <h5 class="card-title">Dream Fest</h5>
-                        <div class="event-details">
-                            <p><i class="fas fa-map-marker-alt"></i> Yaoundé, National Museum</p>
-                            <p><i class="fas fa-calendar-alt"></i>OCT 15, 2025</p>
-                            
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="price-tag">4500XAF</div>
-                            <div class="text-muted small"><i class="fas fa-ticket-alt"></i> 28 tickets left</div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pt-0">
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="4500">
-                            <input type="hidden" name="currency" value="XAF">
-                            <input type="hidden" name="email" value="iryna@gmail.com">
-                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
-                            
-                            <button type="submit" class="btn btn-buy">
-                                <i data-lucide="credit-card" class="w-5 h-5"></i>
-                                Buy ticket
-                            </button>
-                        </form>
-                    </div>
-          </div>
+            @endforeach
         </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="card event-card h-100">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="event-banner" alt="Comedy Show Banner">
-                        <span class="position-absolute top-0 end-0 bg-success text-white px-2 py-1 m-2 rounded-pill small">Comedy</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Stand-Up Comedy Night</h5>
-                        <div class="event-details">
-                            <p><i class="fas fa-map-marker-alt"></i>Cinema room, Bafoussam</p>
-                            <p><i class="fas fa-calendar-alt"></i>DEC 2, 2025</p>
-                           
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="price-tag">6000XAF</div>
-                            <div class="text-muted small"><i class="fas fa-ticket-alt"></i> 28 tickets left</div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pt-0">
-                       <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="6000">
-                            <input type="hidden" name="currency" value="XAF">
-                            <input type="hidden" name="email" value="iryna@gmail.com">
-                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
-                            
-                            <button type="submit" class="btn btn-buy">
-                                <i data-lucide="credit-card" class="w-5 h-5"></i>
-                                Buy ticket
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                @if($events->isEmpty())
+                    <div class="col-12">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <h4 class="mt-3">No Events Found</h4>
+                            <p class="text-muted">We couldn't find any events matching your criteria. Please try adjusting your search or filters.</p>
+                            <a href="{{ route('eventshop') }}" class="btn btn-outline-primary mt-3">
+                                <i class="fas fa-sync-alt me-2"></i> Reset Filters
+                            </a>
 
-           
-            <div class="col-md-4 col-sm-6">
-                <div class="card event-card h-100">
-                    <div class="position-relative">
-                        <img src="download (1).jpg" class="card-img-top event-card-img" alt="Living Together Festival">
-                        <span class="position-absolute top-0 end-0 bg-secondary text-white px-2 py-1 m-2 rounded-pill small">Food</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Living Together Festival</h5>
-                        <div class="event-details">
-                            <p><i class="fas fa-map-marker-alt"></i>Yaoundé, Palais des Sports</p>
-                            <p><i class="fas fa-calendar-alt"></i>DEC 10, 2025 </p>
-                           
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="price-tag">10 000XAF</div>
-                            <div class="text-muted small"><i class="fas fa-ticket-alt"></i> 89 tickets left</div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pt-0">
-                      <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="10000">
-                            <input type="hidden" name="currency" value="XAF">
-                            <input type="hidden" name="email" value="iryna@gmail.com">
-                            <input type="hidden" name="order_id" value="{{ $order_id ?? '' }}">
-                            
-                            <button type="submit" class="btn btn-buy">
-                                <i data-lucide="credit-card" class="w-5 h-5"></i>
-                                Buy ticket
-                            </button>
-                        </form>
                     </div>
                 </div>
-            </div>
+                @endif
         </div>
 
         

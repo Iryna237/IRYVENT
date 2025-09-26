@@ -42,4 +42,9 @@ class EventController extends Controller
 
         return redirect()->back()->with('success','Event created successfully!');
     }
+    public function showeventstore(){
+         $events = Event::orderBY('created_at', 'desc')->get();
+
+         return view('event', compact('events'));
+    }
 }

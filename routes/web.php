@@ -15,9 +15,8 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/eventshop', function () {
-    return view('event');
-})->name('eventshop');
+
+Route::get('/eventshop', [EventController::class, 'showeventstore'])->name('eventshop');
 
 Route::get('/test', function () {
     return view('view_test');
