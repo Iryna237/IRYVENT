@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/eventshop', function () {
-    return view('event');
-})->name('eventshop');
+
+// routes/web.php
+Route::get('/eventshop', [EventController::class, 'index'])->name('eventshop');
+Route::get('/event/{id}', [EventController::class, 'show'])->name('events');
 
 Route::get('/test', function () {
     return view('view_test');
@@ -36,10 +37,17 @@ Route::get('/iryna-register', [AuthController::class, 'Showregister'])->name('ir
 Route::post('/register-customer', [AuthController::class, 'Formregistercustomer'])->name('register-customer');
 Route::post('/register-creator', [AuthController::class, 'Formregistercreator'])->name('register-creator');
 
+
+
+
 Route::get('/iryna-login', [AuthController::class, 'Showlogin'])->name('iryna-login');
 
+// routes/web.php
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
-Route::post('/notchpay/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
+Route::get('/payment/simulate/{commande}', [PaymentController::class, 'simulatePayment'])->name('payment.simulate');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+
 
 Route::post('/iryna-login', [AuthController::class, 'Formlogin'])->name('auth.iryna-login');
 

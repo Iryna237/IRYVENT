@@ -15,7 +15,9 @@ class Event extends Model
         'headline_artist','sport_type','speaker','banner'
     ];
 
-    public function tickets() {
+   
+    public function tickets()
+    {
         return $this->hasMany(Ticket::class);
     }
 }

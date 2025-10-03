@@ -428,7 +428,7 @@
             </div>
             
             <div class="link">
-                <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
+                <p>Don't have an account? <a href="{{ route('iryna-register') }}">Register</a></p>
             </div>
         </div>
     </div>

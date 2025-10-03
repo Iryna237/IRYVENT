@@ -1,88 +1,159 @@
 <?php
+// app/Http/Controllers/PaymentController.php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use NotchPay\NotchPay;
-use NotchPay\Payment;
+use App\Models\Event;
+use App\Models\Ticket;
+use App\Models\Commande;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
     public function checkout(Request $request)
     {
-        NotchPay::setApiKey(env('NOTCHPAY_API_KEY'));
-        try {
-            $payment = Payment::initialize([
-                'amount' => $request->amount,
-                'email' => $request->email,
-                'currency' => $request->currency ?? 'XAF',
-                'callback' => route('payment.callback'),
-                'reference' => uniqid('order_'),
-                'description' => 'Paiement de commande Sellify',
-                'channels' => ['mobile_money', 'card'],
-                'metadata' => [
-                    'user_id' => auth()->id(),
-                    'order_id' => $request->order_id ?? null
-                ]
-            ]);
-            
-            // Redirect user to payment URL
-            return redirect($payment->authorization_url);
-        } catch(\NotchPay\Exceptions\ApiException $e) {
-            return back()->with('error', $e->getMessage());
+        // Valider les données
+        $request->validate([
+            'event_id' => 'required|exists:events,id',
+            'ticket_id' => 'required|exists:tickets,id',
+            'amount' => 'required|numeric',
+            'email' => 'required|email',
+        ]);
+
+        // Récupérer l'événement et le ticket
+        $event = Event::find($request->event_id);
+        $ticket = Ticket::find($request->ticket_id);
+
+        if (!$event || !$ticket) {
+            return back()->with('error', 'Event or ticket not found.');
         }
+
+        // Vérifier la disponibilité
+        if ($ticket->quantity <= 0) {
+            return back()->with('error', 'This ticket is sold out.');
+        }
+
+        // Générer une référence unique
+        $reference = 'TICKET_' . Str::random(8) . '_' . time();
+
+        // Créer la commande en statut pending
+        $commande = Commande::create([
+            'user_id' => auth()->id(),
+            'event_id' => $event->id,
+            'ticket_id' => $ticket->id,
+            'ticket_type' => $ticket->type,
+            'amount' => $request->amount,
+            'currency' => 'XAF',
+            'reference' => $reference,
+            'statut' => 'pending',
+            'quantity' => 1,
+            'customer_email' => $request->email,
+        ]);
+
+        // Rediriger vers l'interface de paiement simulée
+        return redirect()->route('payment.simulate', $commande->id);
     }
 
-    public function callback(Request $request)
+    public function simulatePayment($commandeId)
     {
-        NotchPay::setApiKey(env('NOTCHPAY_API_KEY'));
-        $reference = $request->reference ?? $request->get('reference');
-        try {
-            $payment = Payment::verify($reference);
-            if ($payment->transaction->status === 'complete') {
-                // Payment was successful
-                // TODO: Deliver product or service, save transaction, etc.
-                return redirect()->route('commande.success')->with('success', 'Paiement effectué avec succès!');
-            } else {
-                // Payment is not yet completed or failed
-                return redirect()->route('panier')->with('error', 'Le paiement a échoué ou est incomplet.');
-            }
-        } catch(\NotchPay\Exceptions\ApiException $e) {
-            return redirect()->route('panier')->with('error', $e->getMessage());
+        $commande = Commande::with(['event', 'ticket'])->findOrFail($commandeId);
+        
+        return view('simulate', compact('commande'));
+    }
+
+    public function processPayment(Request $request)
+    {
+        $request->validate([
+            'commande_id' => 'required|exists:commandes,id',
+            'phone_number' => 'nullable|string'
+        ]);
+
+        $commande = Commande::with(['event', 'ticket'])->find($request->commande_id);
+
+        // SIMULATION : Marquer comme payé peu importe le numéro
+        $commande->update([
+            'statut' => 'confirmed',
+            'phone_number' => $request->phone_number
+        ]);
+
+        // Réduire la quantité disponible
+        $ticket = Ticket::find($commande->ticket_id);
+        if ($ticket) {
+            $ticket->decrement('quantity', 1);
         }
+
+        // Générer le QR Code
+        $qrCodeData = $this->generateQRCode($commande);
+
+        // Envoyer l'email avec le ticket
+        $this->sendTicketEmail($commande, $qrCodeData);
+
+        return redirect()->route('payment.success')
+            ->with('success', 'Payment successful! Your ticket has been sent to your email.')
+            ->with('commande_id', $commande->id);
     }
 
-    public function paiementSuccess(Request $request)
+    private function generateQRCode($commande)
+    {
+        $qrData = [
+            'ticket_id' => $commande->id,
+            'event' => $commande->event->title,
+            'ticket_type' => $commande->ticket_type,
+            'reference' => $commande->reference,
+            'amount' => $commande->amount,
+            'currency' => $commande->currency
+        ];
+
+        $qrContent = json_encode($qrData);
+        
+        // Générer le QR code en base64
+        $qrCode = QrCode::format('png')->size(200)->generate($qrContent);
+        $qrCodeBase64 = base64_encode($qrCode);
+
+        return $qrCodeBase64;
+    }
+
+private function sendTicketEmail($commande, $qrCodeData)
 {
-    $user = auth()->user();
-    $panier = session()->get('panier', []);
+    try {
+        $emailData = [
+            'commande' => $commande,
+            'event' => $commande->event,
+            'ticket' => $commande->ticket,
+            'qrCode' => $qrCodeData // Assurez-vous que cette variable est bien passée
+        ];
 
-    if (empty($panier)) {
-        return redirect()->route('panier')->with('error', 'Votre panier est vide.');
+        Mail::send('emails.ticket', $emailData, function($message) use ($commande) {
+            $message->to($commande->customer_email)
+                    ->subject('Your Ticket for ' . $commande->event->title);
+        });
+
+        Log::info('Ticket email sent successfully', [
+            'commande_id' => $commande->id, 
+            'email' => $commande->customer_email
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Failed to send ticket email: ' . $e->getMessage());
+        // Ne pas relancer l'exception pour éviter de bloquer le processus
     }
+}
+    public function success(Request $request)
+    {
+        $commande_id = session('commande_id');
+        $commande = null;
 
-    // Créer la commande
-    $commande = Commande::create([
-        'user_id' => $user->id,
-        'montant' => collect($panier)->sum(fn($item) => $item['prix'] * $item['quantite']),
-        'statut' => 'payee',
-    ]);
+        if ($commande_id) {
+            $commande = Commande::with(['event', 'ticket'])->find($commande_id);
+        }
 
-    // Ajouter les produits de la commande
-    foreach ($panier as $produitId => $item) {
-        CommandeProduit::create([
-            'commande_id' => $commande->id,
-            'produit_id' => $produitId,
-            'quantite' => $item['quantite'],
-            'prix' => $item['prix'],
+        return view('buy_sucess', [
+            'commande' => $commande,
+            'success_message' => session('success')
         ]);
     }
-
-    // Vider le panier
-    session()->forget('panier');
-
-    // Rediriger avec message animé
-    return redirect()->route('commande.confirmation', $commande->id)
-        ->with('success', 'Votre commande est en route 🚚');
-}
-
 }

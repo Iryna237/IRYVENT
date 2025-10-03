@@ -74,20 +74,64 @@ class AuthController extends Controller
         return view('login');
     }   
 
-    public function Formlogin (Request $request){
+// Dans votre AuthController ou LoginController
+    public function Formlogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
         $credentials = $request->only('email', 'password');
+        
+        \Log::info('Login attempt', ['email' => $request->email]);
+
         if (Auth::attempt($credentials)) {
-            $user = Auth::user()->fresh();
-            session(['user_id' => $user->id, 'user_name' => $user->name, 'user_role' => $user->role]);
+            $user = Auth::user();
             
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->role === 'creator') {
-                return redirect()->route('creator.dashboard');
-            } else {
-                return redirect()->route('home');
+            // FORCE le rechargement depuis la base de données
+            $user = $user->fresh();
+            
+            \Log::info('User authenticated', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'role' => $user->role,
+                'role_hex' => bin2hex($user->role)
+            ]);
+
+            // Nettoyage AGGRESSIF du rôle
+            $role = trim($user->role);
+            $role = strtolower($role);
+            $role = preg_replace('/[^a-z]/', '', $role); // Supprime tout sauf les lettres
+            
+            \Log::info('Processed role', [
+                'original_role' => $user->role,
+                'cleaned_role' => $role
+            ]);
+
+            // Stocker en session
+            session([
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'user_email' => $user->email,
+                'user_role' => $role
+            ]);
+
+            // Redirection BASÉE SUR LA SESSION pour plus de fiabilité
+            switch ($role) {
+                case 'admin':
+                    \Log::info('Redirecting to admin dashboard');
+                    return redirect()->route('admin.dashboard');
+                case 'creator':
+                    \Log::info('Redirecting to creator dashboard');
+                    return redirect()->route('creator.dashboard');
+                default:
+                    \Log::info('Redirecting to home');
+                    return redirect()->route('home');
             }
         }
-        return redirect()->back()->withErrors(['email' => 'Identifiants invalides.']);
+
+        \Log::warning('Login failed', ['email' => $request->email]);
+        return back()->withErrors(['email' => 'Identifiants invalides.']);
     }
 }

@@ -451,7 +451,7 @@
             </div>
 
             <div class="login-link">
-                <p>Already have an account? <a href="{{ route('login') }}">Sign In</a></p>
+                <p>Already have an account? <a href="{{ route('iryna-login') }}">Sign In</a></p>
             </div>
         </div>
     </div>

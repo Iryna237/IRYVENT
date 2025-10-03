@@ -136,7 +136,7 @@
           <h1 class="display-4 fw-bold mb-4">Online Event Ticketing Platform</h1>
           <p class="lead mb-4">Discover, book and manage events effortlessly with QR code technology.</p>
           <div class="d-flex gap-3">
-            <a href="#events" class="btn btn-cta btn-lg">Explore Events</a>
+            <a href="{{ route('eventshop') }}" class="btn btn-cta btn-lg">Explore Events</a>
             <a href="{{ url('iryna-register') }}" class="btn btn-outline-light btn-lg">Create Event</a>
           </div>
         </div>

@@ -8,7 +8,7 @@
 <nav class="sidebar">
     @if($role === 'admin')
         <div class="d-flex flex-column h-100">
-            <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
+            <a href="{{ route('eventshop') }}" class="sidebar-brand">
                 IRIVENT
             </a>
             
@@ -70,7 +70,7 @@
     
     @if($role === 'creator')
         <div class="d-flex flex-column h-100">
-            <a href="{{ route('creator.dashboard') }}" class="sidebar-brand">
+            <a href="{{ route('eventshop') }}" class="sidebar-brand">
                 IRIVENT
             </a>q
             

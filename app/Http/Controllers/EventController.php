@@ -39,7 +39,18 @@ class EventController extends Controller
             $newTicket->save();
         }
 
-
         return redirect()->back()->with('success','Event created successfully!');
+    }
+
+    public function index()
+    {
+        $events = Event::with('tickets')->latest()->get();
+        return view('event', compact('events'));
+    }
+
+    public function show($id)
+    {
+        $event = Event::with('tickets')->findOrFail($id);
+        return view('events_details', compact('event'));
     }
 }
