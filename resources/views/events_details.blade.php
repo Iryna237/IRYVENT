@@ -404,6 +404,18 @@
                                     <input type="hidden" name="currency" value="XAF">
                                     <input type="hidden" name="ticket_type" value="{{ $ticket->type }}">
                                     <input type="hidden" name="email" value="{{ auth()->check() ? auth()->user()->email : 'customer@example.com' }}">
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email for ticket delivery</label>
+                                        <input type="email" 
+                                            class="form-control" 
+                                            id="email" 
+                                            name="email" 
+                                            value="{{ auth()->check() ? auth()->user()->email : '' }}"
+                                            placeholder="your-email@example.com"
+                                            required>
+                                        <small class="text-muted">We'll send your e-ticket to this address</small>
+                                    </div>
                                     
                                     <button type="submit" class="btn-purchase" {{ $ticket->quantity <= 0 ? 'disabled' : '' }}>
                                         <i class="fas fa-credit-card"></i>

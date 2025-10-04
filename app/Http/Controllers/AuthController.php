@@ -42,13 +42,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'name'          => 'required',
-            'email'         => 'required|email|unique:creators,email',
+            'email'         => 'required|email|unique:users,email|unique:demandes,email',
             'password'      => 'required|min:6|confirmed',
-            'vice_ID_card'     => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'versa_ID_card'    => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
+            'vice_ID_card'  => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
+            'versa_ID_card' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_selfie'   => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             'face_card'     => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'role' => 'string',
         ]);
 
         $vice_card_Path   = $request->file('vice_ID_card')->store('ID_card', 'public');
@@ -60,21 +59,20 @@ class AuthController extends Controller
             'name'         => $request->name, 
             'email'        => $request->email,
             'password'     => Hash::make($request->password),
-            'vice_ID_card'    => $vice_card_Path,
-            'versa_ID_card'   => $versa_card_Path,
+            'vice_ID_card' => $vice_card_Path,
+            'versa_ID_card'=> $versa_card_Path,
             'face_selfie'  => $face_selfie_Path,
             'face_card'    => $face_card_Path,
             'status'       => 'pending',
         ]);
 
-        return redirect()->route('home')->with('success', 'Creator registration successful!');
+        return redirect()->route('home')->with('success', 'Votre inscription créateur est en attente de validation par l\'administrateur.');
     }
     public function Showlogin ()
     {
         return view('login');
     }   
 
-// Dans votre AuthController ou LoginController
     public function Formlogin(Request $request)
     {
         $request->validate([
@@ -82,34 +80,44 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $credentials = $request->only('email', 'password');
-        
-        \Log::info('Login attempt', ['email' => $request->email]);
+        $email = $request->email;
+        $password = $request->password;
 
-        if (Auth::attempt($credentials)) {
+        \Log::info('Login attempt', ['email' => $email]);
+
+        // Vérifier UNIQUEMENT dans la table User
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            \Log::warning('User not found in users table', ['email' => $email]);
+            
+            // Vérifier si c'est une demande en attente
+            $demande = Demande::where('email', $email)->where('status', 'pending')->first();
+            if ($demande) {
+                return back()->withErrors(['email' => 'Votre compte créateur est en attente de validation par l\'administrateur.']);
+            }
+            
+            return back()->withErrors(['email' => 'Utilisateur non trouvé.']);
+        }
+
+        \Log::info('User found in users table', [
+            'id' => $user->id,
+            'email' => $user->email,
+            'role' => $user->role
+        ]);
+
+        // Tenter la connexion
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = Auth::user();
             
-            // FORCE le rechargement depuis la base de données
-            $user = $user->fresh();
-            
-            \Log::info('User authenticated', [
+            \Log::info('Login successful', [
                 'user_id' => $user->id,
-                'email' => $user->email,
-                'role' => $user->role,
-                'role_hex' => bin2hex($user->role)
+                'role' => $user->role
             ]);
 
-            // Nettoyage AGGRESSIF du rôle
-            $role = trim($user->role);
-            $role = strtolower($role);
-            $role = preg_replace('/[^a-z]/', '', $role); // Supprime tout sauf les lettres
-            
-            \Log::info('Processed role', [
-                'original_role' => $user->role,
-                'cleaned_role' => $role
-            ]);
+            // Nettoyer le rôle
+            $role = $this->cleanRole($user->role);
 
-            // Stocker en session
             session([
                 'user_id' => $user->id,
                 'user_name' => $user->name,
@@ -117,21 +125,28 @@ class AuthController extends Controller
                 'user_role' => $role
             ]);
 
-            // Redirection BASÉE SUR LA SESSION pour plus de fiabilité
-            switch ($role) {
-                case 'admin':
-                    \Log::info('Redirecting to admin dashboard');
-                    return redirect()->route('admin.dashboard');
-                case 'creator':
-                    \Log::info('Redirecting to creator dashboard');
-                    return redirect()->route('creator.dashboard');
-                default:
-                    \Log::info('Redirecting to home');
-                    return redirect()->route('home');
+            // Redirection basée sur le rôle
+            if ($role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($role === 'creator') {
+                return redirect()->route('creator.dashboard');
+            } else {
+                return redirect()->route('home');
             }
         }
 
-        \Log::warning('Login failed', ['email' => $request->email]);
-        return back()->withErrors(['email' => 'Identifiants invalides.']);
+        \Log::warning('Login failed - password incorrect', ['email' => $email]);
+        return back()->withErrors(['email' => 'Email ou mot de passe incorrect.']);
+    }
+
+    private function cleanRole($role)
+    {
+        if (empty($role)) return 'user';
+        
+        $role = trim($role);
+        $role = strtolower($role);
+        $role = preg_replace('/[^a-z]/', '', $role);
+        
+        return $role ?: 'user';
     }
 }

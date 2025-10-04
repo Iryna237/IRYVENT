@@ -45,33 +45,35 @@ class AdminController extends Controller
         return view('edit-demande', compact('demande'));
     }
 
-     public function acceptDemande(Demande $demande)
+    public function validateCreator($demandeId)
     {
-        // 1. Update the request status
-        $demande->status = 'approved';
-        $demande->save();
-
-        User::create([
-            'name'     => $demande->name,
-            'email'    => $demande->email,
-            'password' => Hash::make($demande->password),
-            'role'       => 'creator',
+        $demande = Demande::findOrFail($demandeId);
+        
+        $user = User::create([
+            'name' => $demande->name,
+            'email' => $demande->email,
+            'password' => $demande->password,
+            'role' => 'creator',
         ]);
 
         Creator::create([
-            'name'         => $demande->name, 
-            'email'        => $demande->email,
-            'password'     => Hash::make($demande->password),
-            'vice_ID_card' => $demande->vice_ID_card,
-            'versa_ID_card' => $demande->versa_ID_card,
-            'face_selfie' => $demande->face_selfie,
-            'face_card' => $demande->face_card,
+            'user_id' => $user->id,
+            'name' => $demande->name,
+            'email' => $demande->email,
         ]);
 
+        $demande->update(['status' => 'approved']);
 
-        return redirect()->route('admin.demandes.index')->with('success', 'La demande a été acceptée avec succès.');
+        return redirect()->back()->with('success', 'Créateur validé avec succès !');
     }
 
+    public function rejectCreator($demandeId)
+    {
+        $demande = Demande::findOrFail($demandeId);
+        $demande->update(['status' => 'rejected']);
+        
+        return redirect()->back()->with('success', 'Demande créateur rejetée.');
+    }
     public function refuseDemande(Demande $demande)
     {
         // Update the request status

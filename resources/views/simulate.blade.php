@@ -134,7 +134,16 @@
                                pattern="[0-9]{9}">
                         <small class="text-muted">Enter your mobile money number (simulation only)</small>
                     </div>
-
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Email for Ticket Delivery *</label>
+                        <input type="email" 
+                            name="email" 
+                            class="form-control phone-input" 
+                            placeholder="your-email@example.com"
+                            value="{{ old('email', auth()->check() ? auth()->user()->email : '') }}"
+                            required>
+                        <small class="text-muted">Your e-ticket will be sent to this address</small>
+                    </div>
                     <div class="payment-methods">
                         <div class="method-btn active" data-method="mobile">
                             <div class="method-icon text-success">
@@ -175,7 +184,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Gestion des méthodes de paiement
             const methodButtons = document.querySelectorAll('.method-btn');
             const paymentMethodInput = document.getElementById('paymentMethod');
 
@@ -187,7 +195,6 @@
                 });
             });
 
-            // Animation du bouton de paiement
             const payButton = document.getElementById('payButton');
             const paymentForm = document.getElementById('paymentForm');
 
@@ -195,7 +202,6 @@
                 payButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
                 payButton.disabled = true;
                 
-                // Simulation de délai pour plus de réalisme
                 setTimeout(() => {
                     paymentForm.submit();
                 }, 2000);
